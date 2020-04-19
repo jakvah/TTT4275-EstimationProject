@@ -28,8 +28,8 @@ CRLB_THETA = 12*(SIGMA_SQUARED)*((n_0**2)*N + 2*n_0*P + Q) / ((A**2)*(N**2)*((N*
 # ---------- Signals ---------- #
 
 # White complex Gaussian noise
-wReal = np.random.normal(0, 1, size=N)
-wImag = np.random.normal(0, 1, size=N)*1j
+wReal = np.random.normal(0, SIGMA_SQUARED, size=N)
+wImag = np.random.normal(0, SIGMA_SQUARED, size=N)*1j
 
 w = []
 for i in range(N):
