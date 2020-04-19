@@ -14,3 +14,12 @@ def GenerateNoise(signal, SNR_dB): # desiredSNR [dB]; signal is an array with co
    print(10.0*np.log10((np.var(signal))/(np.var(n))))
    return n
 
+# Returns most dominant frequency of FFT in hertz
+# fft must be numpy array
+def findDominantFrequency(fft,samplingPeriod,fftLength):
+    maxVal = max(fft)
+    maxIndex = np.where(fft == maxVal)
+    maxIndex = maxIndex[0][0]
+
+    f = maxIndex * (1/(samplingPeriod*fftLength))
+    return f

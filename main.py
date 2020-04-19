@@ -7,11 +7,14 @@ A = 1
 SNR = 10 # In dB
 SIGMA_SQUARED = (A**2)/(2*SNR)
 T = 10**(-6) 
-N = 50
+N = 513
 n_0 = -256
 f_0 = 10**5
 omega_0 = 2*np.pi*f_0
 theta = np.pi/8
+
+k = 10
+fft_length = 2**k
 
 # ---------- CRLB Helpers ---------- #
 P = (N*(N-1)) / 2
@@ -44,29 +47,26 @@ for i in range(N):
 
 
 def main():
-    n = np.arange(N)
     print("The CRLB for the Omega estimator is: ", CRLB_OMEGA)
     print("The CRLB for the Theta estimator is: ",CRLB_THETA)
     
+    n = np.arange(N)
+    
+    # White noise
     plt.figure(1)
     plt.plot(w)
     plt.title("White complex Gaussian noise")
     plt.savefig("noise.png")
     
-    plt.figure(3)
+    # Only signal
+    plt.figure(2)
     plt.stem(n,s)
     plt.title("Plot of DT signal: $s[n] = e^{j(\omega n T -1)}$")
     plt.savefig("signal.png")
 
-    plt.figure(2)
-    plt.title("Total sigal")
-    plt.xlabel("n")
-    plt.ylabel("x[n] = ")
-    plt.plot(x)
-    plt.savefig("total.png") 
-
+    # Signal + white noise
     n = np.arange(N)
-    plt.figure(4)
+    plt.figure(3)
     plt.title("Plot of DT signal: $x[n] = e^{j(\omega n T -1)} + w[n]$")
     plt.xlabel("n")
     plt.ylabel("x[n]")
@@ -74,19 +74,34 @@ def main():
     plt.savefig("stem.png")
 
     # Fourier transform
+    FT_s = np.fft.fft(s,n = fft_length)
+    FT_x = np.fft.fft(x,n = fft_length)
 
 
-    FT_s = np.fft.fft(s)
-    FT_x = np.fft.fft(x)
-
+    print(len(x))
+    print(len(s))
+    print()
+    print("FT_s length is ", len(FT_s))
+    print("FT_x length is ", len(FT_x))
+    
+    
     plt.subplots_adjust(left=0.125, bottom=0.1, right=0.9, top=0.9, wspace=0.4, hspace=0.4)
     plt.subplot(211)
     plt.title("FFT of only signal")
-    plt.stem(n,FT_s)
+    plt.stem(np.arange(len(FT_s)),FT_s)
     plt.subplot(212)
     plt.title("FFT of signal embedded in noise")
-    plt.stem(n,FT_x)
+    plt.stem(np.arange(len(FT_x)),FT_x)
     plt.savefig("fft.png")    
+    
+
+    # Checking that most dominant is as is to be expected
+    f = bml.findDominantFrequency(FT_s,T,fft_length)
+    print("Most dominant frequency in s[in] is: ", f, " Hz")
+
+    # Finding most dominant in total signal
+    f = bml.findDominantFrequency(FT_x,T,fft_length)
+    print("Most dominant frequency in x[n] is: ",f, " Hz")
 
 main()
 
