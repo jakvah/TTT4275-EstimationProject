@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import buggesmatteland as bml
+import math
 
 # ---------- Specifications ---------- #
 A = 1.0
