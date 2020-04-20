@@ -5,7 +5,7 @@ import math
 
 # ---------- Specifications ---------- #
 A = 1.0
-SNR_db = -10 # In dB
+SNR_db = 20 # In dB
 
 SNR_linear = 10.0**(SNR_db/10)
 SIGMA_SQUARED = (A**2)/(2*SNR_linear)
@@ -106,10 +106,6 @@ def iterate():
     # Finding most dominant in total signal
     f_2 = bml.findDominantFrequency(FT_x,T,fft_length)
 
-    #print("Most dominant frequency in x[n] is: ",f_2/1000, " kHz")
-    #print("Avvik:", f_1 - f_2)
-    #print("Neste mulige hadde vært", f_2 + (1/(T*fft_length)),"eller, ", f_2 - (1/(T*fft_length)))
-
     return f_2
 
 def main():
@@ -117,7 +113,8 @@ def main():
     
     print("Running ",ITERATIONS, "iterations with:")
     print("SNR [dB]:",SNR_db)
-    print("FFT length:",fft_length)    
+    print("FFT length:",fft_length,"(2^" + str(k) + ")")
+    print("Frequency:",f_0/1000,"kHz")  
     print("The CRLB for the Omega estimator is:", np.sqrt((CRLB_OMEGA)/(2*np.pi))/1000,"kHz")
     print("The CRLB for the Theta estimator is:",CRLB_THETA)
     print()
@@ -127,7 +124,8 @@ def main():
     freqs = []
     for i in range(ITERATIONS):
         f = iterate()
-        print("Iteration nr",(i+1),": ",f/1000,"kHz")
+        err = f_0 - f
+        print("Iteration nr",(i+1),": ",f/1000,"kHz. Error:",(err/1000),"kHz")
         freqs.append(f)
 
      
