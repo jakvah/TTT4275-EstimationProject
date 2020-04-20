@@ -17,8 +17,10 @@ f_0 = 10**5
 omega_0 = 2*np.pi*f_0
 theta = np.pi/8
 
-k = 10
+k = 20
 fft_length = 2**k
+
+ITERATIONS = 10
 
 # ---------- CRLB Helpers ---------- #
 P = (N*(N-1)) / 2
@@ -50,12 +52,9 @@ def iterate():
     for i in range(N):
         x.append(s[i] + w[i])
 
-    
-    print("The CRLB for the Omega estimator is: ", np.sqrt((CRLB_OMEGA)/(2*np.pi)))
-    print("The CRLB for the Theta estimator is: ",CRLB_THETA)
-    
     n = np.arange(n_0,(n_0 + (N)))
     
+    """
     # White noise
     plt.figure(1)
     plt.plot(w)
@@ -77,7 +76,7 @@ def iterate():
     plt.plot(x)
     plt.savefig("stem.png")
     plt.show()
-    
+    """    
 
     # Fourier transform
     FT_s = np.fft.fft(s,n = fft_length)
@@ -86,7 +85,7 @@ def iterate():
     FT_S = np.absolute(FT_s)
     FT_x = np.absolute(FT_x)
    
-    
+    """
     plt.subplots_adjust(left=0.125, bottom=0.1, right=0.9, top=0.9, wspace=0.4, hspace=0.4)
     plt.subplot(211)
     plt.title("FFT of only signal")
@@ -98,6 +97,7 @@ def iterate():
     plt.savefig("fft.png")    
     
     plt.show()
+    """
     
     # Checking that most dominant is as is to be expected
     f_1 = bml.findDominantFrequency(FT_s,T,fft_length)
@@ -113,10 +113,22 @@ def iterate():
     return f_2
 
 def main():
+
+    
+    print("Running ",ITERATIONS, "iterations with:")
+    print("SNR [dB]:",SNR_db)
+    print("FFT length:",fft_length)    
+    print("The CRLB for the Omega estimator is:", np.sqrt((CRLB_OMEGA)/(2*np.pi)))
+    print("The CRLB for the Theta estimator is:",CRLB_THETA)
+    print()
+    
+    print(" *--------------- RESULTS ---------------*")
+
     freqs = []
-    for i in range(1):
-        freqs.append(iterate())
+    for i in range(ITERATIONS):
+        f = iterate()
+        print("Iteration nr",(i+1),": ",f/1000,"kHz")
+        freqs.append(f)
 
-    print(freqs)
-
+     
 main()
