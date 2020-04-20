@@ -1,11 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import buggesmatteland as bml
+import math
 
 # ---------- Specifications ---------- #
 A = 1
-SNR = 60 # In dB
-SIGMA_SQUARED = (A**2)/(2*10**(-SNR/10))
+SNR = -10 # In dB
+SIGMA_SQUARED = (A**2)/(2*10**(SNR/10))
 T = 10**(-6) 
 N = 513
 n_0 = -256
@@ -28,8 +29,8 @@ CRLB_THETA = 12*(SIGMA_SQUARED)*((n_0**2)*N + 2*n_0*P + Q) / ((A**2)*(N**2)*((N*
 # ---------- Signals ---------- #
 
 # White complex Gaussian noise
-wReal = np.random.normal(0, SIGMA_SQUARED, size=N)
-wImag = np.random.normal(0, SIGMA_SQUARED, size=N)*1j
+wReal = np.random.normal(0, math.sqrt(SIGMA_SQUARED), size=N)
+wImag = np.random.normal(0, math.sqrt(SIGMA_SQUARED), size=N)*1j
 
 w = []
 for i in range(N):
