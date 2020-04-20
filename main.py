@@ -118,7 +118,7 @@ def main():
     print("Running ",ITERATIONS, "iterations with:")
     print("SNR [dB]:",SNR_db)
     print("FFT length:",fft_length)    
-    print("The CRLB for the Omega estimator is:", np.sqrt((CRLB_OMEGA)/(2*np.pi)))
+    print("The CRLB for the Omega estimator is:", np.sqrt((CRLB_OMEGA)/(2*np.pi))/1000,"kHz")
     print("The CRLB for the Theta estimator is:",CRLB_THETA)
     print()
     
