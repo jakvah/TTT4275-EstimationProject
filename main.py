@@ -33,7 +33,7 @@ wImag = np.random.normal(0, SIGMA_SQUARED, size=N)*1j
 
 w = []
 for i in range(N):
-    w.append([wReal[i] + wImag[i]])
+    w.append(wReal[i] + wImag[i])
 
 # Exponential signal
 s = []
@@ -52,6 +52,10 @@ def main():
     
     n = np.arange(N)
     
+    print("s looks like: ")
+    print(s)
+    print("x looks like: ")
+    print(x)
     # White noise
     plt.figure(1)
     plt.plot(w)
@@ -75,7 +79,7 @@ def main():
 
     # Fourier transform
     FT_s = np.fft.fft(s,n = fft_length)
-    FT_x = np.fft.fft(x,n = fft_length)
+    FT_x = np.fft.fft(x,fft_length)
 
 
     print(len(x))
@@ -94,7 +98,6 @@ def main():
     plt.stem(np.arange(len(FT_x)),FT_x)
     plt.savefig("fft.png")    
     
-
     # Checking that most dominant is as is to be expected
     f = bml.findDominantFrequency(FT_s,T,fft_length)
     print("Most dominant frequency in s[in] is: ", f, " Hz")
