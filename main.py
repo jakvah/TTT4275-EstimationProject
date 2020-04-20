@@ -4,8 +4,8 @@ import buggesmatteland as bml
 
 # ---------- Specifications ---------- #
 A = 1
-SNR = 10 # In dB
-SIGMA_SQUARED = (A**2)/(2*SNR)
+SNR = 60 # In dB
+SIGMA_SQUARED = (A**2)/(2*10**(-SNR/10))
 T = 10**(-6) 
 N = 513
 n_0 = -256
@@ -38,7 +38,7 @@ for i in range(N):
 # Exponential signal
 s = []
 for n in range(N):
-    s.append(A*np.exp(np.complex(0,1)*(omega_0)*n*T - 1))
+    s.append(A*np.exp(np.complex(0,1)*(omega_0)*n*T + theta))
 
 # Total signal
 x = []
@@ -76,11 +76,13 @@ def main():
     plt.ylabel("x[n]")
     plt.stem(n,x)
     plt.savefig("stem.png")
+    plt.show()
 
     # Fourier transform
     FT_s = np.fft.fft(s,n = fft_length)
     FT_x = np.fft.fft(x,fft_length)
 
+    
 
     print(len(x))
     print(len(s))
@@ -98,6 +100,8 @@ def main():
     plt.stem(np.arange(len(FT_x)),FT_x)
     plt.savefig("fft.png")    
     
+    plt.show()
+
     # Checking that most dominant is as is to be expected
     f = bml.findDominantFrequency(FT_s,T,fft_length)
     print("Most dominant frequency in s[in] is: ", f, " Hz")
