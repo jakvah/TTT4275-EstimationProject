@@ -5,7 +5,7 @@ import math
 
 # ---------- Specifications ---------- #
 A = 1
-SNR = -10 # In dB
+SNR = 10 # In dB
 SIGMA_SQUARED = (A**2)/(2*10**(SNR/10))
 T = 10**(-6) 
 N = 513
