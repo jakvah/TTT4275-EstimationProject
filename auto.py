@@ -4,12 +4,13 @@ import buggesmatteland as bml
 import math
 import statistics as st
 import xlsxwriter
+import sys
 
 # ---------- These are supposed to change ---------- #
 dBs = [-10,0,10,20,30,40,50,60]
 lengthPowers = [10,12,14,16,18,20]
 
-ITERATIONS = 1000
+ITERATIONS = 100
 
 # ---------- Constants ---------- #
 A = 1.0
@@ -78,10 +79,13 @@ def main():
         dataIterationIndex = 0
         
         ws.write(1 + lengthIterationIndex*len(dBs), 0, str(fft_length))
-        print("Computing FFTs og length", fft_length)
+        print("Computing FFTs of length", fft_length)
+        if p == 18:
+                print("Now also showing SNR progress:")
 
         for SNR_db in dBs:
             ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 1, SNR_db)
+            
             
             SIGMA_SQUARED = bml.sigmaSquaredFromdB(SNR_db,A)
             CRLB_OMEGA = (12*(SIGMA_SQUARED)) / ((A**2)*(T**2)*N*((N**2)-1))
@@ -106,8 +110,10 @@ def main():
             ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 5, (CRLB_OMEGA/(2*np.pi**2)))
 
             dataIterationIndex += 1
+            if p > 16:
+                print("Done with",SNR_db)
         lengthIterationIndex += 1
-        print("Added iterationsdata to",FILENAME)
 
     wb.close()      
+    print("Added iterationsdata to",FILENAME)
 main()
