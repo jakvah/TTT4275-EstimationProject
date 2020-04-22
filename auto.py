@@ -119,10 +119,10 @@ def main():
             errvar=st.variance(error, errmean)
             print("The variance of the freq error is: ",errvar/1000, "kHz")
 
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 2, str(freqmean))
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 3, str(errmean))
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 4, str(errvar))
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 5, str(CRLB_OMEGA))
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 2, freqmean)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 3, errmean)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 4, errvar)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 5, CRLB_OMEGA)
 
             dataIterationIndex += 1
         lengthIterationIndex += 1
