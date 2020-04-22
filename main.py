@@ -18,7 +18,7 @@ f_0 = 10**5
 omega_0 = 2*np.pi*f_0
 theta = np.pi/8
 
-k = 20
+k = 22
 fft_length = 2**k
 
 ITERATIONS = 10
@@ -53,53 +53,13 @@ def iterate():
     for i in range(N):
         x.append(s[i] + w[i])
 
-    n = np.arange(n_0,(n_0 + (N)))
-    
-    """
-    # White noise
-    plt.figure(1)
-    plt.plot(w)
-    plt.title("White complex Gaussian noise")
-    plt.savefig("noise.png")
-    
-    # Only signal
-    plt.figure(2)
-    plt.plot(s)
-    plt.title("Plot of DT signal: $s[n] = e^{j(\omega n T + \Theta}$")
-    plt.savefig("signal.png")
-
-    # Signal + white noise
-    n = np.arange(N)
-    plt.figure(3)
-    plt.title("Plot of DT signal: $x[n] = e^{j(\omega n T + \Theta} + w[n]$")
-    plt.xlabel("n")
-    plt.ylabel("x[n]")
-    plt.plot(x)
-    plt.savefig("stem.png")
-    plt.show()
-    """    
-
     # Fourier transform
     FT_s = np.fft.fft(s,n = fft_length)
     FT_x = np.fft.fft(x,fft_length)
 
     FT_S = np.absolute(FT_s)
     FT_x = np.absolute(FT_x)
-   
-    """
-    plt.subplots_adjust(left=0.125, bottom=0.1, right=0.9, top=0.9, wspace=0.4, hspace=0.4)
-    plt.subplot(211)
-    plt.title("FFT of only signal")
-    plt.plot(FT_s)
-
-    plt.subplot(212)
-    plt.title("FFT of signal embedded in noise")
-    plt.plot(FT_x)
-    plt.savefig("fft.png")    
-    
-    plt.show()
-    """
-    
+       
     # Checking that most dominant is as is to be expected
     f_1 = bml.findDominantFrequency(FT_s,T,fft_length)
     #("Most dominant frequency in s[in] is: ", f_1/1000, " kHz")
@@ -109,14 +69,12 @@ def iterate():
 
     return f_2
 
-def main():
-
-    
+def main():    
     print("Running ",ITERATIONS, "iterations with:")
     print("SNR [dB]:",SNR_db)
     print("FFT length:",fft_length,"(2^" + str(k) + ")")
     print("Frequency:",f_0/1000,"kHz")  
-    print("The CRLB for the Omega estimator is:", np.sqrt((CRLB_OMEGA)/(2*np.pi))/1000,"kHz")
+    print("The CRLB for the Omega estimator is:", ((CRLB_OMEGA)/(2*np.pi))/1000,"kHz")
     print("The CRLB for the Theta estimator is:",CRLB_THETA)
     print()
     
@@ -130,13 +88,12 @@ def main():
         err = f_0 - f
         print("Iteration nr",(i+1),": ",f/1000,"kHz. Error:",(err/1000),"kHz")
         freqs.append(f)
-        error.append(err)
-    print(error)    
+        error.append(err) 
 
     errmean=st.mean(error)
-    print("Mean freq error is: ", errmean, "Hz")
+    print("Mean freq error is: ", errmean/1000, "kHz")
 
     errvar=st.variance(error, errmean)
-    print("The variance of the freq error is: ",errvar, "Hz")
+    print("The variance of the freq error is: ",errvar/1000, "kHz")
      
 main()
