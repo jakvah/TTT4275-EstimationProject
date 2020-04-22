@@ -71,7 +71,7 @@ def main():
 
     # Colum names
     ws.write(0, 0, "FFT Length")
-    ws.write(0, 1, "SNR")
+    ws.write(0, 1, "SNR [dB]")
     ws.write(0, 2, "Mean estimated")
     ws.write(0, 3, "Mean error")
     ws.write(0, 4, "Variance")
@@ -85,6 +85,7 @@ def main():
 
         dataIterationIndex = 0
         for SNR_db in dBs:
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 1, SNR_db)
             SIGMA_SQUARED = bml.sigmaSquaredFromdB(SNR_db,A)
             CRLB_OMEGA = (12*(SIGMA_SQUARED)) / ((A**2)*(T**2)*N*((N**2)-1))
             CRLB_THETA = 12*(SIGMA_SQUARED)*((n_0**2)*N + 2*n_0*P + Q) / ((A**2)*(N**2)*((N**2)-1))
