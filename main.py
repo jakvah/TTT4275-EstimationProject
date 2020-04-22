@@ -2,10 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import buggesmatteland as bml
 import math
+import statistics as st
 
 # ---------- Specifications ---------- #
 A = 1.0
-SNR_db = 20 # In dB
+SNR_db = -10 # In dB
 
 SNR_linear = 10.0**(SNR_db/10)
 SIGMA_SQUARED = (A**2)/(2*SNR_linear)
@@ -121,12 +122,19 @@ def main():
     
     print(" *--------------- RESULTS ---------------*")
 
+
+    error=[]
     freqs = []
     for i in range(ITERATIONS):
         f = iterate()
         err = f_0 - f
         print("Iteration nr",(i+1),": ",f/1000,"kHz. Error:",(err/1000),"kHz")
         freqs.append(f)
+        error.append(err)
+    print(error)    
+
+    errmean=st.mean(error)
+    print("Mean error is: ", errmean, "Hz")
 
      
 main()
