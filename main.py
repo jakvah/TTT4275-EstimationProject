@@ -21,7 +21,7 @@ theta = np.pi/8
 k = 22
 fft_length = 2**k
 
-ITERATIONS = 10
+ITERATIONS = 10 
 
 # ---------- CRLB Helpers ---------- #
 P = (N*(N-1)) / 2
@@ -46,7 +46,7 @@ def iterate():
     # Exponential signal
     s = []
     for n in range(N):
-        s.append(A*np.exp(np.complex(0,1)*(omega_0)*n*T + theta))
+        s.append(A*np.exp(np.complex(0,1)*((omega_0)*n*T + theta)))
 
     # Total signal
     x = []

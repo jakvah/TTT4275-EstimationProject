@@ -9,7 +9,7 @@ import xlsxwriter
 dBs = [-10,0,10,20,30,40,50,60]
 lengthPowers = [10,12,14,16,18,20]
 
-ITERATIONS = 2
+ITERATIONS = 100
 
 # ---------- Constants ---------- #
 A = 1.0
@@ -46,7 +46,7 @@ def iterate(SIGMA_SQUARED,fft_length):
     # Exponential signal
     s = []
     for n in range(N):
-        s.append(A*np.exp(np.complex(0,1)*(omega_0)*n*T + theta))
+        s.append(A*np.exp(np.complex(0,1)*((omega_0)*n*T + theta)))
 
     # Total signal
     x = []
