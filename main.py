@@ -134,7 +134,9 @@ def main():
     print(error)    
 
     errmean=st.mean(error)
-    print("Mean error is: ", errmean, "Hz")
+    print("Mean freq error is: ", errmean, "Hz")
 
+    errvar=st.variance(error, errmean)
+    print("The variance of the freq error is: ",errvar, "Hz")
      
 main()
