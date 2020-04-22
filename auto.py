@@ -9,7 +9,7 @@ import xlsxwriter
 dBs = [-10,0,10,20,30,40,50,60]
 lengthPowers = [10,12,14,16,18,20]
 
-ITERATIONS = 10
+ITERATIONS = 1000
 
 # ---------- Constants ---------- #
 A = 1.0
@@ -75,27 +75,17 @@ def main():
     lengthIterationIndex = 0
     for p in lengthPowers:
         fft_length = 2**p
-        ws.write(1 + lengthIterationIndex*len(dBs), 0, str(fft_length))
-
         dataIterationIndex = 0
+        
+        ws.write(1 + lengthIterationIndex*len(dBs), 0, str(fft_length))
+        print("Computing FFTs og length", fft_length)
+
         for SNR_db in dBs:
             ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 1, SNR_db)
+            
             SIGMA_SQUARED = bml.sigmaSquaredFromdB(SNR_db,A)
             CRLB_OMEGA = (12*(SIGMA_SQUARED)) / ((A**2)*(T**2)*N*((N**2)-1))
             CRLB_THETA = 12*(SIGMA_SQUARED)*((n_0**2)*N + 2*n_0*P + Q) / ((A**2)*(N**2)*((N**2)-1))
-
-            """
-            print("*---------------------------------------*")
-            print("Running ",ITERATIONS, "iterations with:")
-            print("SNR [dB]:",SNR_db)
-            print("FFT length:",fft_length,"(2^" + str(p) + ")")
-            print("Frequency:",f_0/1000,"kHz")  
-            print("The CRLB for the Omega estimator is:", ((CRLB_OMEGA)/(4*np.pi**2)),"Hz^2")
-            print("The CRLB for the Theta estimator is:",CRLB_THETA)
-            print()
-            print(" *--------------- RESULTS ---------------*")
-            """
-
 
             error=[]
             freq = []
@@ -103,18 +93,12 @@ def main():
                 f = iterate(SIGMA_SQUARED,fft_length)
 
                 err = f_0 - f
-                #print("Iteration nr",(i+1),": ",f/1000,"kHz. Error:",(err/1000),"kHz")
-                
                 freq.append(f)
                 error.append(err) 
 
             freqmean = st.mean(freq)
-            #print("Mean freq is: ",freqmean/1000,"kHz")
             errmean=st.mean(error)
-            #print("Mean freq error is: ", errmean/1000, "kHz")
-
             errvar=st.variance(error, errmean)
-            #print("The variance of the freq error is: ",errvar/1000, "kHz")
 
             ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 2, freqmean)
             ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 3, errmean)
