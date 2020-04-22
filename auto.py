@@ -81,11 +81,11 @@ def main():
     lengthIterationIndex = 0
     for p in lengthPowers:
         fft_length = 2**p
-        ws.write(1 + lengthIterationIndex*4, 0, str(fft_length))
+        ws.write(1 + lengthIterationIndex*len(dBs), 0, str(fft_length))
 
         dataIterationIndex = 0
         for SNR_db in dBs:
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 1, SNR_db)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 1, SNR_db)
             SIGMA_SQUARED = bml.sigmaSquaredFromdB(SNR_db,A)
             CRLB_OMEGA = (12*(SIGMA_SQUARED)) / ((A**2)*(T**2)*N*((N**2)-1))
             CRLB_THETA = 12*(SIGMA_SQUARED)*((n_0**2)*N + 2*n_0*P + Q) / ((A**2)*(N**2)*((N**2)-1))
@@ -120,10 +120,10 @@ def main():
             errvar=st.variance(error, errmean)
             print("The variance of the freq error is: ",errvar/1000, "kHz")
 
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 2, freqmean)
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 3, errmean)
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 4, errvar)
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*4, 5, CRLB_OMEGA)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 2, freqmean)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 3, errmean)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 4, errvar)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 5, CRLB_OMEGA)
 
             dataIterationIndex += 1
         lengthIterationIndex += 1
