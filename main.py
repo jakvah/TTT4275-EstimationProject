@@ -59,9 +59,9 @@ def iterate():
     # Finding most dominant in total signal
     f_2,i = bml.findDominantFrequency(np.absolute(FT_x),T,fft_length)
 
-    theta = phase(np.exp(-(np.complex(0,1)*2*.np.pi*f_2*n_0*))*FT_x[i])
+    t = np.angle(np.exp(-(np.complex(0,1)*2*np.pi*f_2*n_0*T))*FT_x[i])
 
-    return f_2,theta
+    return f_2,t
 
 def main():    
     print("Running ",ITERATIONS, "iterations with:")
