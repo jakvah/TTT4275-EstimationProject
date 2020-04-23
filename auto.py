@@ -10,7 +10,7 @@ import sys
 dBs = [-10,0,10,20,30,40,50,60]
 lengthPowers = [10,12,14,16,18,20]
 
-ITERATIONS = 1000
+ITERATIONS = 10
 
 # ---------- Constants ---------- #
 A = 1.0
@@ -44,8 +44,8 @@ def iterate(SIGMA_SQUARED,fft_length):
     # Exponential signal
     s = []
     for n in range(N):
-        s.append(A*np.exp(np.complex(0,1)*((omega_0)*n*T + theta)))
-
+        s.append(A*np.exp(np.complex(0,1)*((omega_0)*(n + n_0)*T + theta)))
+    
     # Total signal
     x = []
     for i in range(N):
@@ -53,25 +53,36 @@ def iterate(SIGMA_SQUARED,fft_length):
 
     # Fourier transform
     FT_x = np.fft.fft(x,fft_length)
-    FT_x = np.absolute(FT_x)
-       
+    
+    
     # Finding most dominant in total signal
-    f_2 = bml.findDominantFrequency(FT_x,T,fft_length)
+    f_2,i = bml.findDominantFrequency(np.absolute(FT_x),T,fft_length)
 
-    return f_2
+    t = np.angle((np.exp(-(np.complex(0,1)*2*np.pi*f_2*n_0*T)))*FT_x[i])
+
+    return f_2,t
 
 def main():
+    print("Simulating datasets with:")
+    print("SNRs: ",dBs)
+    print("FFTs with radix-2 powers:",lengthPowers)
+    print("Each with",ITERATIONS, "iterations. This might take some time ...")
+    print()
+
     wb = xlsxwriter.Workbook(FILENAME)
     ws = wb.add_worksheet()
 
     # Colum names
     ws.write(0, 0, "FFT Length")
     ws.write(0, 1, "SNR [dB]")
-    ws.write(0, 2, "Mean estimated")
-    ws.write(0, 3, "Mean error")
-    ws.write(0, 4, "Variance")
-    ws.write(0, 5, "CRLB [Hz^2]")
-
+    ws.write(0, 2, "Mean estimated frequency [Hz]")
+    ws.write(0, 3, "Mean frequency error [Hz]")
+    ws.write(0, 4, "Frequency variance [Hz^2]")
+    ws.write(0, 5, "Frequency CRLB [Hz^2]")
+    ws.write(0, 6, "Mean estimated phase [rad]")
+    ws.write(0, 7, "Mean phase error [rad]")
+    ws.write(0, 8, "Phase variance [rad^2]")
+    ws.write(0, 9, "Phase CRLB [rad^2]")
 
     lengthIterationIndex = 0
     for p in lengthPowers:
@@ -91,29 +102,44 @@ def main():
             CRLB_OMEGA = (12*(SIGMA_SQUARED)) / ((A**2)*(T**2)*N*((N**2)-1))
             CRLB_THETA = 12*(SIGMA_SQUARED)*((n_0**2)*N + 2*n_0*P + Q) / ((A**2)*(N**2)*((N**2)-1))
 
-            error=[]
+            freqError=[]
             freq = []
+            thetas = []
+            phaseError = []
             for i in range(ITERATIONS):
-                f = iterate(SIGMA_SQUARED,fft_length)
+                f,t = iterate(SIGMA_SQUARED,fft_length)
 
-                err = f_0 - f
+                errf = f_0 - f
                 freq.append(f)
-                error.append(err) 
+                freqError.append(errf) 
+
+                errp = theta - t
+                thetas.append(t)
+                phaseError.append(errp)
 
             freqmean = st.mean(freq)
-            errmean=st.mean(error)
-            errvar=st.variance(error, errmean)
+            freqErrMean=st.mean(freqError)
+            freqErrVar=st.variance(freqError, freqErrMean)
+
+            phaseMean = st.mean(thetas)
+            phaseErrMean = st.mean(phaseError)
+            phaseErrVar = st.variance(phaseError,phaseErrMean)
 
             ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 2, freqmean)
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 3, errmean)
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 4, errvar)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 3, freqErrMean)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 4, freqErrVar)
             ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 5, (CRLB_OMEGA/(4*np.pi**2)))
+
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 6, phaseMean)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 7, phaseErrMean)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 8, phaseErrVar)
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 9, CRLB_THETA)
 
             dataIterationIndex += 1
             if p > 16:
-                print("Done with",SNR_db)
+                print("Done with SNR:",SNR_db, "dB")
         lengthIterationIndex += 1
 
     wb.close()      
-    print("Added iterationsdata to",FILENAME)
+    print("Added iterations data to",FILENAME)
 main()

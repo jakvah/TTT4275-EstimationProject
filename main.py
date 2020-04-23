@@ -6,7 +6,7 @@ import statistics as st
 
 # ---------- Specifications ---------- #
 A = 1.0
-SNR_db = 60 # In dB
+SNR_db = 30 # In dB
 
 SNR_linear = 10.0**(SNR_db/10)
 SIGMA_SQUARED = (A**2)/(2*SNR_linear)
@@ -16,7 +16,7 @@ N = 513
 n_0 = -256
 f_0 = 10**5
 omega_0 = 2*np.pi*f_0
-theta = np.pi/2
+theta = np.pi/8
 
 k = 16
 fft_length = 2**k
@@ -48,7 +48,7 @@ def iterate():
     for n in range(N):
         s.append(A*np.exp(np.complex(0,1)*((omega_0)*(n + n_0)*T + theta)))
     
-    print("S[0] = ",s[256])
+
     # Total signal
     x = []
     for i in range(N):
