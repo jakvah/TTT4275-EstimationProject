@@ -23,7 +23,7 @@ def findDominantFrequency(fft,samplingPeriod,fftLength):
     maxIndex = maxIndex[0][0]
 
     f = maxIndex * (1/(samplingPeriod*fftLength))
-    return f
+    return f, maxIndex
 
 def sigmaSquaredFromdB(SNR_db,A):
     SNR_linear = 10.0**(SNR_db/10)

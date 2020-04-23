@@ -55,12 +55,13 @@ def iterate():
 
     # Fourier transform
     FT_x = np.fft.fft(x,fft_length)
-    FT_x = np.absolute(FT_x)
     
     # Finding most dominant in total signal
-    f_2 = bml.findDominantFrequency(FT_x,T,fft_length)
+    f_2,i = bml.findDominantFrequency(np.absolute(FT_x),T,fft_length)
 
-    return f_2
+    theta = phase(np.exp(-(np.complex(0,1)*2*.np.pi*f_2*n_0*))*FT_x[i])
+
+    return f_2,theta
 
 def main():    
     print("Running ",ITERATIONS, "iterations with:")
@@ -76,17 +77,22 @@ def main():
 
     error=[]
     freqs = []
+    thetas = []
     for i in range(ITERATIONS):
-        f = iterate()
+        f,theta = iterate()
         err = f_0 - f
         print("Iteration nr",(i+1),": ",f/1000,"kHz. Error:",(err/1000),"kHz")
         freqs.append(f) # In hertz
         error.append(err) 
+        thetas.append(theta)
 
     errmean=st.mean(error)
     print("Mean freq error is: ", errmean/1000, "kHz")
+    thetamean = st.mean(thetas)
+    print("Mean theta is:", thetamean)
 
     errvar=st.variance(error, errmean)
     print("The variance of the freq error is: ",errvar, "Hz^2")
+
      
 main()
