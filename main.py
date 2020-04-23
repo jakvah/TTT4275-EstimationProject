@@ -1,12 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import buggesmatteland as bml
-import math
+import cmath
 import statistics as st
 
 # ---------- Specifications ---------- #
 A = 1.0
-SNR_db = 0 # In dB
+SNR_db = 60 # In dB
 
 SNR_linear = 10.0**(SNR_db/10)
 SIGMA_SQUARED = (A**2)/(2*SNR_linear)
@@ -16,7 +16,7 @@ N = 513
 n_0 = -256
 f_0 = 10**5
 omega_0 = 2*np.pi*f_0
-theta = np.pi/8
+theta = np.pi/2
 
 k = 16
 fft_length = 2**k
@@ -46,8 +46,9 @@ def iterate():
     # Exponential signal
     s = []
     for n in range(N):
-        s.append(A*np.exp(np.complex(0,1)*((omega_0)*n*T + theta)))
-
+        s.append(A*np.exp(np.complex(0,1)*((omega_0)*(n + n_0)*T + theta)))
+    
+    print("S[0] = ",s[256])
     # Total signal
     x = []
     for i in range(N):
@@ -56,10 +57,11 @@ def iterate():
     # Fourier transform
     FT_x = np.fft.fft(x,fft_length)
     
+    
     # Finding most dominant in total signal
     f_2,i = bml.findDominantFrequency(np.absolute(FT_x),T,fft_length)
 
-    t = np.angle(np.exp(-(np.complex(0,1)*2*np.pi*f_2*n_0*T))*FT_x[i])
+    t = np.angle((np.exp(-(np.complex(0,1)*2*np.pi*f_2*n_0*T)))*FT_x[i])
 
     return f_2,t
 
@@ -79,13 +81,14 @@ def main():
     freqs = []
     thetas = []
     for i in range(ITERATIONS):
-        f,theta = iterate()
+        f,t = iterate()
         err = f_0 - f
-        print("Iteration nr",(i+1),": ",f/1000,"kHz. Error:",(err/1000),"kHz")
+
         freqs.append(f) # In hertz
         error.append(err) 
-        thetas.append(theta)
+        thetas.append(t)
 
+    print("Mean freq:",st.mean(freqs))
     errmean=st.mean(error)
     print("Mean freq error is: ", errmean/1000, "kHz")
     thetamean = st.mean(thetas)
@@ -93,6 +96,8 @@ def main():
 
     errvar=st.variance(error, errmean)
     print("The variance of the freq error is: ",errvar, "Hz^2")
+
+    bml.circlePlot(int(bml.makeAnglePositive(thetamean*180/np.pi)))
 
      
 main()

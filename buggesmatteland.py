@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 def GenerateNoise(signal, SNR_dB): # desiredSNR [dB]; signal is an array with complex values
    n = np.zeros((len(signal),1), dtype=complex)
@@ -32,3 +33,33 @@ def sigmaSquaredFromdB(SNR_db,A):
 
 
 
+def circlePlot(angle):
+    N = 360
+    bottom = 0
+    max_height = 4
+
+    theta = np.linspace(0.0, 2 * np.pi, N, endpoint=False)
+    radii = max_height*np.random.rand(N)
+    width = ((2*np.pi) / N) + 0.01
+
+    for i in range(N):
+        radii[i] = 0
+        if i == int(round(angle)):
+            radii[i] = (max_height*1)
+
+    ax = plt.subplot(111, polar=True)
+    bars = ax.bar(theta, radii, width=width, bottom=bottom)
+    ax.set_yticklabels([])
+    ax.set_title("Plot av vinkelen: " + str(int(round(angle))) + " i grader:")
+
+    # Spicy farger
+    for r, bar in zip(radii, bars): 
+        bar.set_facecolor(plt.cm.jet(r / 10.))
+        bar.set_alpha(0.8)
+    plt.savefig("angleplot.png")
+    plt.show()
+
+def makeAnglePositive(ang):
+    if ang < 0:
+        ang = 360 + ang
+    return ang
