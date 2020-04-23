@@ -10,7 +10,7 @@ import sys
 dBs = [-10,0,10,20,30,40,50,60]
 lengthPowers = [10,12,14,16,18,20]
 
-ITERATIONS = 100
+ITERATIONS = 1000
 
 # ---------- Constants ---------- #
 A = 1.0
@@ -107,7 +107,7 @@ def main():
             ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 2, freqmean)
             ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 3, errmean)
             ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 4, errvar)
-            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 5, (CRLB_OMEGA/(2*np.pi**2)))
+            ws.write(1 + dataIterationIndex +lengthIterationIndex*len(dBs), 5, (CRLB_OMEGA/(4*np.pi**2)))
 
             dataIterationIndex += 1
             if p > 16:
