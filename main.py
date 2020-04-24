@@ -89,40 +89,9 @@ def iterate():
 
     return f_2,t
 
-
-def enkel(xguess):
-    return (xguess[0]-1)**2 + 1
-
-def functionToBeMinimized(f_variable):
-    
-    
+def functionToBeMinimized(f_variable):  
     f_var_sliced = f_variable[0]
     
-    """
-    # -------- Signal with noise & and FFT -------- #
-    
-    # White complex Gaussian noise
-    wReal = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)
-    wImag = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)*1j
-
-    w = []
-    for i in range(N):
-        w.append(wReal[i] + wImag[i])
-
-    # Exponential signal
-    f = []
-    for n in range(N):
-        f.append(A*np.exp(np.complex(0,1)*((omega_0)*(n + n_0)*T + theta)))
-    
-    # Total signal
-    x = []
-    for i in range(N):
-        x.append(f[i] + w[i])
-        
-        
-    # Fourier transform
-    initalEstimateFFT = np.fft.fft(x,2**10)
-    """
     # -------- Exponential signal without noise -------- #
     s = []
     for n in range(N):
@@ -141,8 +110,7 @@ def functionToBeMinimized(f_variable):
         plt.plot(np.absolute(fftGuess))
 
         plt.savefig("compare.png")
-  
-    #print("Frequency:",f_var_sliced, "MSE:",bml.meanSquareError(np.absolute(fftGuess),np.absolute(gFFT)))
+
     return bml.meanSquareError(np.absolute(fftGuess),np.absolute(gFFT))
     
 
@@ -190,15 +158,10 @@ def main():
     print("Doing part b)")
     print()
        
-
     result = scipy.optimize.minimize(functionToBeMinimized,100000,method = "Nelder-Mead")
     print(result)
 
-
-
-
-
-    
+    # Plotting MSE    
     mse = []    
     t = [1,2]
     for f in range(60000,140000,100):
