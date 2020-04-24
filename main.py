@@ -33,6 +33,30 @@ Q = (N*(N-1)*(2*N-1)) / 6
 CRLB_OMEGA = (12*(SIGMA_SQUARED)) / ((A**2)*(T**2)*N*((N**2)-1)) # In Radians^2
 CRLB_THETA = 12*(SIGMA_SQUARED)*((n_0**2)*N + 2*n_0*P + Q) / ((A**2)*(N**2)*((N**2)-1))
 
+# ---------- GLOBAL FFT TIL 1B) ---------- #
+
+# Generate a signal with some sweet sweet noise
+# White complex Gaussian noise
+gwReal = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)
+gwImag = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)*1j
+
+gw = []
+for i in range(N):
+    gw.append(gwReal[i] + gwImag[i])
+
+# Exponential signal
+gs = []
+for n in range(N):
+    gs.append(A*np.exp(np.complex(0,1)*((omega_0)*(n + n_0)*T + theta)))
+    
+# Total signal
+gx = []
+for i in range(N):
+    gx.append(gs[i] + gw[i])
+
+gFFT = np.fft.fft(gx,2**10)
+gf = bml.findDominantFrequency(np.absolute(gFFT),T,2**10)
+
 def iterate():
     # ---------- Signals ---------- #
 
@@ -65,16 +89,61 @@ def iterate():
 
     return f_2,t
 
-def functionToBeMinimized(f_variable,initalEstimateFFT):
+
+def enkel(xguess):
+    return (xguess[0]-1)**2 + 1
+
+def functionToBeMinimized(f_variable):
+    
+    
+    f_var_sliced = f_variable[0]
+    
+    """
+    # -------- Signal with noise & and FFT -------- #
+    
+    # White complex Gaussian noise
+    wReal = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)
+    wImag = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)*1j
+
+    w = []
+    for i in range(N):
+        w.append(wReal[i] + wImag[i])
+
     # Exponential signal
+    f = []
+    for n in range(N):
+        f.append(A*np.exp(np.complex(0,1)*((omega_0)*(n + n_0)*T + theta)))
+    
+    # Total signal
+    x = []
+    for i in range(N):
+        x.append(f[i] + w[i])
+        
+        
+    # Fourier transform
+    initalEstimateFFT = np.fft.fft(x,2**10)
+    """
+    # -------- Exponential signal without noise -------- #
     s = []
     for n in range(N):
-        s.append(A*np.exp(np.complex(0,1)*((f_0)*(n + n_0)*T + theta)))
+        s.append(A*np.exp(np.complex(0,1)*((2*np.pi*f_var_sliced)*(n + n_0)*T + theta)))
 
     fftGuess = np.fft.fft(s,2**10)
-    
+
+    if f_var_sliced == 100000:
+        plt.figure(1)
+        plt.subplot(211)
+        plt.title("With noise")
+        plt.plot(np.absolute(gFFT))
+
+        plt.subplot(212)
+        plt.title("Without noise")
+        plt.plot(np.absolute(fftGuess))
+
+        plt.savefig("compare.png")
   
-    return bml.meanSquareError(fftGuess,initalEstimateFFT)
+    #print("Frequency:",f_var_sliced, "MSE:",bml.meanSquareError(np.absolute(fftGuess),np.absolute(gFFT)))
+    return bml.meanSquareError(np.absolute(fftGuess),np.absolute(gFFT))
     
 
 def main():
@@ -93,6 +162,7 @@ def main():
     error_f=[]
     freqs = []
     thetas = []
+
     for i in range(ITERATIONS):
         f,t = iterate()
         err_f = f_0 - f
@@ -114,48 +184,37 @@ def main():
     mean_error=st.mean(error_theta)
 
     print("Mean theta is:", thetamean)
-    print("Mean theta error is: ", st.mean(error_theta))
-    print("The variance of the phase error is: ", st.variance(error_theta, mean_error))
-
-    bml.circlePlot(int(bml.makeAnglePositive(thetamean*180/np.pi)))
+    print("Mean theta error is: error", st.mean(error_theta))
+    print("The variance of the phase  is: ", st.variance(error_theta, mean_error))
     
     print("Doing part b)")
     print()
-     
-    # Generate a signal with some sweet sweet noise
-    # White complex Gaussian noise
-    wReal = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)
-    wImag = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)*1j
+       
 
-    w = []
-    for i in range(N):
-        w.append(wReal[i] + wImag[i])
+    result = scipy.optimize.minimize(functionToBeMinimized,100000,method = "Nelder-Mead")
+    print(result)
 
-    # Exponential signal
-    s = []
-    for n in range(N):
-        s.append(A*np.exp(np.complex(0,1)*((omega_0)*(n + n_0)*T + theta)))
+
+
+
+
     
+    mse = []    
+    t = [1,2]
+    for f in range(60000,140000,100):
+        t[0] = f
+        mse.append(functionToBeMinimized(t))
 
-    print("S:")
-    print(s)
+    plt.figure(2)
+    plt.title("MSE")
+    plt.xlabel("Frequency [Hz]")
+    plt.ylabel("Mean Square Error")
+    plt.plot(np.arange(60000,140000,100),mse)
+    plt.savefig("mse.png")
+    
+    print("The guess with noise and FFT length 2^10:",gf[0], "Hz")
+    print("The guess after finetuning:",result.x[0]) 
 
-
-    # Total signal
-    x = []
-    for i in range(N):
-        x.append(s[i] + w[i])
-        
-    print("X:")
-    print(x)
-
-    # Fourier transform
-    FT = np.fft.fft(x,2**10)
-    print("lenght of initial:",len(FT))
-    initalGuess = f_0 - 30000
-
-    result = scipy.optimize.minimize(functionToBeMinimized,initalGuess,FT,method = "Nelder-Mead")
-    print(result.x)
 
 
 

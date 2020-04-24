@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import os
+import sys
 
 def GenerateNoise(signal, SNR_dB): # desiredSNR [dB]; signal is an array with complex values
    n = np.zeros((len(signal),1), dtype=complex)
@@ -19,16 +19,16 @@ def GenerateNoise(signal, SNR_dB): # desiredSNR [dB]; signal is an array with co
 def meanSquareError(list1,list2):
     if len(list1) != len(list2):
         print("List lengths don't match. Exiting")
-        os.exit()
+        sys.exit()
 
     total = 0
     for i in range(len(list1)):
-        total += (list1[i] + list2[i])**2
+        total += (list1[i] - list2[i])**2
 
     return total/len(list1)
     
 # Returns most dominant frequency of FFT in hertz
-# fft must be numpy array
+# fft must be numpy array, absolute value
 def findDominantFrequency(fft,samplingPeriod,fftLength):
     maxVal = max(fft)
     maxIndex = np.where(fft == maxVal)
