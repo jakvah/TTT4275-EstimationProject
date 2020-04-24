@@ -17,3 +17,7 @@ As long FFT estimates are undesirable in practice, an FFT of length 1024 data po
 
 ### Automation
 In order to perform and analyze larger simulations `auto.py` has been provided. It simulates point **a)** from above, but iterates through FFTs of lengths 2^{10,12,14,16,18,20}. For each FFT length iteration the signal is simulated with SNRs of {-10,0,10,20,30,40,50,60} [dB]. The amount of iterations are 1000. The results are saved to an Excel Spreedsheet file. 
+
+### Math functions
+
+The necessary mathematical calculations are done in a seperate module named `buggesmatteland.py` It is imported by both `main.py` and `auto.py` and must be included in the same folder.
