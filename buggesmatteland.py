@@ -22,7 +22,7 @@ def meanSquareError(list1,list2):
         os.exit()
 
     total = 0
-    for i in range len(list1):
+    for i in range(len(list1)):
         total += (list1[i] + list2[i])**2
 
     return total/len(list1)
