@@ -65,6 +65,17 @@ def iterate():
 
     return f_2,t
 
+def functionToBeMinimized(args):
+    f_variable, initalEstimateFFT = args[0],args[1]
+
+     f = []
+    for n in range(N):
+        f.append(A*np.exp(np.complex(0,1)*((f_variable)*(n + n_0)*T + theta)))
+    fftGuess = np.fft.fft(f,len(initalEstimateFFT))
+    
+    return bml.meanSquareError(fftGuess,initalEstimateFFT)
+    
+
 def main():    
     print("Running ",ITERATIONS, "iterations with:")
     print("SNR [dB]:",SNR_db)
@@ -98,6 +109,10 @@ def main():
     print("The variance of the freq error is: ",errvar, "Hz^2")
 
     bml.circlePlot(int(bml.makeAnglePositive(thetamean*180/np.pi)))
+
+    print("Doing 1b)")
+    print()
+
 
      
 main()
