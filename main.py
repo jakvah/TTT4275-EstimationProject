@@ -6,7 +6,7 @@ import statistics as st
 
 # ---------- Specifications ---------- #
 A = 1.0
-SNR_db = 30 # In dB
+SNR_db = 60 # In dB
 
 SNR_linear = 10.0**(SNR_db/10)
 SIGMA_SQUARED = (A**2)/(2*SNR_linear)
@@ -18,10 +18,10 @@ f_0 = 10**5
 omega_0 = 2*np.pi*f_0
 theta = np.pi/8
 
-k = 16
+k = 20
 fft_length = 2**k
 
-ITERATIONS = 100 
+ITERATIONS = 1000
 
 # ---------- CRLB Helpers ---------- #
 P = (N*(N-1)) / 2
@@ -76,28 +76,40 @@ def main():
     
     print(" *--------------- RESULTS ---------------*")
 
-
-    error=[]
+    error_theta=[]
+    error_f=[]
     freqs = []
     thetas = []
     for i in range(ITERATIONS):
         f,t = iterate()
-        err = f_0 - f
-
+        err_f = f_0 - f
+        err_theta=theta-t
         freqs.append(f) # In hertz
-        error.append(err) 
+        error_f.append(err_f) 
         thetas.append(t)
+        error_theta.append(err_theta)
+
 
     print("Mean freq:",st.mean(freqs))
-    errmean=st.mean(error)
+    errmean=st.mean(error_f)
     print("Mean freq error is: ", errmean/1000, "kHz")
     thetamean = st.mean(thetas)
-    print("Mean theta is:", thetamean)
 
-    errvar=st.variance(error, errmean)
-    print("The variance of the freq error is: ",errvar, "Hz^2")
+    errvar_f=st.variance(error_f, errmean)
+    print("The variance of the freq error is: ",errvar_f, "Hz^2")
+
+    mean_error=st.mean(error_theta)
+
+    print("Mean theta is:", thetamean)
+    print("Mean theta error is: ", st.mean(error_theta))
+    print("The variance of the phase error is: ", st.variance(error_theta, mean_error))
 
     bml.circlePlot(int(bml.makeAnglePositive(thetamean*180/np.pi)))
+    
+    
+
+
+
 
      
 main()
