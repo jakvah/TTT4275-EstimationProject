@@ -1,0 +1,192 @@
+[33mcommit 3395c836a5ef7b17e49f9110d4f433d8e2342f90[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Fri Apr 24 20:45:31 2020 +0000
+
+    Merge branch 'master' of https://github.com/jakvah/TTT4275-EstimationProject
+
+[33mcommit 945ba20c5852977757c8ec6019c9135d800ea543[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Fri Apr 24 20:44:01 2020 +0000
+
+    Added MSE to BML and crated obj function to be minimized
+
+[33mcommit 45d325c617831212dcd911a9a4730fc8f0e7ab24[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Thu Apr 23 22:05:25 2020 +0000
+
+    Added phase calcs to auto.py
+
+[33mcommit bf3095a78fed0411b6b98945e9a215e163873f4a[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Thu Apr 23 20:31:59 2020 +0000
+
+    astronimsk fase
+
+[33mcommit ccfcd26050d9847973c5d980f81115ba45ff9aaa[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Thu Apr 23 18:39:39 2020 +0000
+
+    Fikset bøgz
+
+[33mcommit b04c40bb50b0f14a1cde12cdb9ab7032b13080d6[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Thu Apr 23 18:35:03 2020 +0000
+
+    Lagt inn theta
+
+[33mcommit 4470efd94e01858c4eeec0c7d1f4d0490e4db53d[m
+Author: Andreas H Bugge <andrehbu@stud.ntnu.no>
+Date:   Thu Apr 23 13:35:39 2020 +0200
+
+    la til 2^2 i CRLB2
+
+[33mcommit 383fc2b356373979e4e6840a578f449615700b3e[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Wed Apr 22 23:38:23 2020 +0000
+
+    Småplukk
+
+[33mcommit b512fbf0841ceb9d84d58fa65bbceaae6d3eb41e[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Wed Apr 22 21:08:38 2020 +0000
+
+    Styling
+
+[33mcommit ba0294f55978706630ab1ed56419106d19b491fd[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Wed Apr 22 21:04:07 2020 +0000
+
+    Fixed variance estimation & CRLB
+
+[33mcommit a6f9ebe1ef9ebdafb5a3cf133c9341d609216b36[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Wed Apr 22 19:02:34 2020 +0000
+
+    Fikset signalet
+
+[33mcommit c8d01ab512d5eafb7dd6b29df82caaa7d875f04b[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Wed Apr 22 15:04:45 2020 +0000
+
+    Fikset sånn at den printer alle SNR
+
+[33mcommit 6c293128bc5c97fc4f551756ec19074ce6df7d45[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Wed Apr 22 14:50:47 2020 +0000
+
+    la til snr data
+
+[33mcommit 30963a81e239c0eeadc9ab425b13dcdaa34b8404[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Wed Apr 22 14:46:01 2020 +0000
+
+    HU E JO INNAAFOOOOR DA
+
+[33mcommit c7823fddb4a3a6161cb2d57fba5617e74a1f4bb7[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Wed Apr 22 14:42:40 2020 +0000
+
+    Skriving til excel oh lord
+
+[33mcommit 23514db556b30a61e00bc1101be5105db0216122[m
+Author: Andreas H Bugge <andrehbu@stud.ntnu.no>
+Date:   Wed Apr 22 13:29:55 2020 +0200
+
+    Hu e fortsatt innafor da
+
+[33mcommit 34273b1d4c946020b71c0a048624cf1c81b147c1[m
+Author: Andreas H Bugge <andrehbu@stud.ntnu.no>
+Date:   Wed Apr 22 13:24:54 2020 +0200
+
+    Hu e innafor da
+
+[33mcommit d21aef1df79aaad04117d76b1db701f65d86851c[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Mon Apr 20 21:00:50 2020 +0000
+
+    More formatting of results
+
+[33mcommit 8a8e399c7fb5160454ffd0e77688f415e44aafa0[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Mon Apr 20 20:47:40 2020 +0000
+
+    CRLB formatt corresponds to result format
+
+[33mcommit f12c2cb5ea552dd8c6924b7b5081baf3680fbecc[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Mon Apr 20 20:42:14 2020 +0000
+
+    La til flere gjennomkjøringer med samme parameter
+
+[33mcommit fe125d12c6b651f28312ac019286ddb8c8022211[m
+Merge: 1e99df1 fa16e37
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Mon Apr 20 20:24:17 2020 +0000
+
+    HO E JO INNAFOR DA
+
+[33mcommit 1e99df1ebb97e0bedb006335b416c289a9c50afe[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Mon Apr 20 20:20:49 2020 +0000
+
+    Fixed so that we maximize absolute value of FFT
+
+[33mcommit fa16e37898bcea205482dc82b95c0970941fcde9[m
+Author: Andreas H Bugge <andrehbu@stud.ntnu.no>
+Date:   Mon Apr 20 16:40:35 2020 +0200
+
+    Æ får du og du får mi
+
+[33mcommit 662de76e6ad199e55b130b8f26bee46c7372d06e[m
+Author: Andreas H Bugge <andrehbu@stud.ntnu.no>
+Date:   Mon Apr 20 16:38:57 2020 +0200
+
+    Æ for di og du får mi
+
+[33mcommit e659d0253f2903f4bd0c752b3ef20b699c1376e3[m
+Author: Andreas H Bugge <andrehbu@stud.ntnu.no>
+Date:   Mon Apr 20 15:45:54 2020 +0200
+
+    Norge
+
+[33mcommit c947938be553bda94e856ee0907536dcdadc259d[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Mon Apr 20 12:57:18 2020 +0000
+
+    Fixed array types
+
+[33mcommit 78a62724868bea7caab75cd91fb4da5994dfa247[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Sun Apr 19 23:16:55 2020 +0000
+
+    White noise is now genereated with variance calcualted from the specified SNR
+
+[33mcommit 2020aa080e43238d3da3d35f52fd18a3dc7c1b9f[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Sun Apr 19 23:12:16 2020 +0000
+
+    Added function that finds most dominant frequency in FFT. Some bugs present
+
+[33mcommit b9e6a13e8e4bc24cb892fe53e781d9be3d4d823a[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Fri Apr 17 23:13:15 2020 +0000
+
+    Recreated white gaussian noise
+
+[33mcommit 96b5d00be29ddbd0cd93f6d5fc18288dae98ead9[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Fri Apr 17 22:12:41 2020 +0000
+
+    Fixed signals
+
+[33mcommit ed72da23f6efe1168352bb7d9011e54d172332a6[m
+Author: jakvah <jakobvahlin@gmail.com>
+Date:   Thu Apr 16 23:18:32 2020 +0000
+
+    Lagt til tall og funksjoner, ikke stort...
+
+[33mcommit fe0b45cc3d0f5dae3e7bdad35652401a39b08d44[m
+Author: Jakob Vahlin <39927850+jakvah@users.noreply.github.com>
+Date:   Thu Apr 16 13:43:24 2020 +0200
+
+    Initial commit

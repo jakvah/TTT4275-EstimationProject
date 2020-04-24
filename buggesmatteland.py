@@ -26,6 +26,7 @@ def meanSquareError(list1,list2):
         total += (list1[i] + list2[i])**2
 
     return total/len(list1)
+    
 # Returns most dominant frequency of FFT in hertz
 # fft must be numpy array
 def findDominantFrequency(fft,samplingPeriod,fftLength):

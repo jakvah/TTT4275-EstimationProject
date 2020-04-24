@@ -121,10 +121,13 @@ def main():
 
 
 
+<<<<<<< HEAD
 
     print("Doing 1b)")
     print()
 
+=======
+>>>>>>> c96d167b09a924712004d5c6da351e93686c355b
 
      
 main()
