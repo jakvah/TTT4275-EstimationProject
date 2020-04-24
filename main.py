@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import buggesmatteland as bml
 import cmath
 import statistics as st
+import scipy.optimize
 
 # ---------- Specifications ---------- #
 A = 1.0
@@ -18,10 +19,10 @@ f_0 = 10**5
 omega_0 = 2*np.pi*f_0
 theta = np.pi/8
 
-k = 20
+k = 10
 fft_length = 2**k
 
-ITERATIONS = 1000
+ITERATIONS = 10
 
 # ---------- CRLB Helpers ---------- #
 P = (N*(N-1)) / 2
@@ -57,7 +58,6 @@ def iterate():
     # Fourier transform
     FT_x = np.fft.fft(x,fft_length)
     
-    
     # Finding most dominant in total signal
     f_2,i = bml.findDominantFrequency(np.absolute(FT_x),T,fft_length)
 
@@ -65,18 +65,20 @@ def iterate():
 
     return f_2,t
 
-def functionToBeMinimized(args):
-    f_variable, initalEstimateFFT = args[0],args[1]
-
-     f = []
+def functionToBeMinimized(f_variable,initalEstimateFFT):
+    # Exponential signal
+    s = []
     for n in range(N):
-        f.append(A*np.exp(np.complex(0,1)*((f_variable)*(n + n_0)*T + theta)))
-    fftGuess = np.fft.fft(f,len(initalEstimateFFT))
+        s.append(A*np.exp(np.complex(0,1)*((f_0)*(n + n_0)*T + theta)))
+
+    fftGuess = np.fft.fft(s,2**10)
     
+  
     return bml.meanSquareError(fftGuess,initalEstimateFFT)
     
 
-def main():    
+def main():
+
     print("Running ",ITERATIONS, "iterations with:")
     print("SNR [dB]:",SNR_db)
     print("FFT length:",fft_length,"(2^" + str(k) + ")")
@@ -117,17 +119,44 @@ def main():
 
     bml.circlePlot(int(bml.makeAnglePositive(thetamean*180/np.pi)))
     
+    print("Doing part b)")
+    print()
+     
+    # Generate a signal with some sweet sweet noise
+    # White complex Gaussian noise
+    wReal = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)
+    wImag = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)*1j
+
+    w = []
+    for i in range(N):
+        w.append(wReal[i] + wImag[i])
+
+    # Exponential signal
+    s = []
+    for n in range(N):
+        s.append(A*np.exp(np.complex(0,1)*((omega_0)*(n + n_0)*T + theta)))
     
 
+    print("S:")
+    print(s)
 
 
-<<<<<<< HEAD
+    # Total signal
+    x = []
+    for i in range(N):
+        x.append(s[i] + w[i])
+        
+    print("X:")
+    print(x)
 
-    print("Doing 1b)")
-    print()
+    # Fourier transform
+    FT = np.fft.fft(x,2**10)
+    print("lenght of initial:",len(FT))
+    initalGuess = f_0 - 30000
 
-=======
->>>>>>> c96d167b09a924712004d5c6da351e93686c355b
+    result = scipy.optimize.minimize(functionToBeMinimized,initalGuess,FT,method = "Nelder-Mead")
+    print(result.x)
 
-     
+
+
 main()
