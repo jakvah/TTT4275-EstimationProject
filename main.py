@@ -4,10 +4,42 @@ import buggesmatteland as bml
 import cmath
 import statistics as st
 import scipy.optimize
+import sys
 
+# ---------- Specifications from CMD line ---------- #
+attemptCounter = 0
+
+try: 
+    SNR_db = int(sys.argv[1])
+except IndexError:
+    print("No arguments given. Running with default.")
+    SNR_db = -10
+    k = 10
+    fft_length = 2**k
+    ITERATIONS = 100
+    attemptCounter += 1
+
+try:    
+    k = int(sys.argv[2])
+    fft_length = 2**k
+except IndexError:
+    if attemptCounter == 1:
+        print("No length or iteration arguments given. Running with default.")
+        k = 10
+        fft_length = 2**k
+        ITERATIONS = 100
+        attemptCounter += 1
+
+try:
+    ITERATIONS = int(sys.argv[3])
+except IndexError:
+    if attemptCounter == 2:
+        print("No iteration argument given. Running with default.")
+        ITERATIONS = 100
+
+print()
 # ---------- Specifications ---------- #
 A = 1.0
-SNR_db = 60 # In dB
 
 SNR_linear = 10.0**(SNR_db/10)
 SIGMA_SQUARED = (A**2)/(2*SNR_linear)
@@ -18,11 +50,6 @@ n_0 = -256
 f_0 = 10**5
 omega_0 = 2*np.pi*f_0
 theta = np.pi/8
-
-k = 10
-fft_length = 2**k
-
-ITERATIONS = 10
 
 # ---------- CRLB Helpers ---------- #
 P = (N*(N-1)) / 2
@@ -73,7 +100,6 @@ def iterate():
     for n in range(N):
         s.append(A*np.exp(np.complex(0,1)*((omega_0)*(n + n_0)*T + theta)))
     
-
     # Total signal
     x = []
     for i in range(N):
@@ -155,12 +181,12 @@ def main():
     print("Mean theta error is: error", st.mean(error_theta))
     print("The variance of the phase  is: ", st.variance(error_theta, mean_error))
     
+    print()
     print("Doing part b)")
     print()
        
     result = scipy.optimize.minimize(functionToBeMinimized,100000,method = "Nelder-Mead")
-    print(result)
-
+    
     # Plotting MSE    
     mse = []    
     t = [1,2]
