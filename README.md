@@ -14,10 +14,10 @@ Estimates the frequency of a complex sinusoidal signal embedded in complex gauss
 
 To easliy change the simualtion variables listed above you can pass them as arugments if you are running the script from the command line. 
 ```
-$~ python3 main.py [SNR (in decibel)*] [Radix-2 power of FFT length] [Iterations
+$~ python3 main.py [SNR (in decibel)*] [Radix-2 power of FFT length] [Iterations]
 ```
 
-E.g if you want to simulate 100 iterations with and SNR of -10 dB using FFTs of length 2^10, you run:
+E.g if you want to simulate 100 iterations with an SNR of -10 dB using FFTs of length 2^10, you run:
 
 ```
 $~ python3 main.py -10 10 100
