@@ -38,7 +38,7 @@ except IndexError:
         ITERATIONS = 100
 
 print()
-# ---------- Specifications ---------- #
+# ---------- Signal specifications ---------- #
 A = 1.0
 
 SNR_linear = 10.0**(SNR_db/10)
@@ -60,9 +60,8 @@ Q = (N*(N-1)*(2*N-1)) / 6
 CRLB_OMEGA = (12*(SIGMA_SQUARED)) / ((A**2)*(T**2)*N*((N**2)-1)) # In Radians^2
 CRLB_THETA = 12*(SIGMA_SQUARED)*((n_0**2)*N + 2*n_0*P + Q) / ((A**2)*(N**2)*((N**2)-1))
 
-# ---------- GLOBAL FFT TIL 1B) ---------- #
+# ---------- Generate a FFT to be used in 1B) ---------- #
 
-# Generate a signal with some sweet sweet noise
 # White complex Gaussian noise
 gwReal = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)
 gwImag = np.random.normal(0, np.sqrt(SIGMA_SQUARED), size=N)*1j
@@ -84,7 +83,8 @@ for i in range(N):
 gFFT = np.fft.fft(gx,2**10)
 gf = bml.findDominantFrequency(np.absolute(gFFT),T,2**10)
 
-def iterate():
+# ---------- Computes MLE of the frecuency ---------- #
+def computeMLE():
     # ---------- Signals ---------- #
 
     # White complex Gaussian noise
@@ -115,6 +115,7 @@ def iterate():
 
     return f_2,t
 
+# ---------- Function to be minimzed in part 1B) ---------- #
 def functionToBeMinimized(f_variable):  
     f_var_sliced = f_variable[0]
     
@@ -124,18 +125,6 @@ def functionToBeMinimized(f_variable):
         s.append(A*np.exp(np.complex(0,1)*((2*np.pi*f_var_sliced)*(n + n_0)*T + theta)))
 
     fftGuess = np.fft.fft(s,2**10)
-
-    if f_var_sliced == 100000:
-        plt.figure(1)
-        plt.subplot(211)
-        plt.title("With noise")
-        plt.plot(np.absolute(gFFT))
-
-        plt.subplot(212)
-        plt.title("Without noise")
-        plt.plot(np.absolute(fftGuess))
-
-        plt.savefig("compare.png")
 
     return bml.meanSquareError(np.absolute(fftGuess),np.absolute(gFFT))
     
@@ -158,7 +147,7 @@ def main():
     thetas = []
 
     for i in range(ITERATIONS):
-        f,t = iterate()
+        f,t = computeMLE()
         err_f = f_0 - f
         err_theta=theta-t
         freqs.append(f) # In hertz
@@ -199,7 +188,7 @@ def main():
     plt.xlabel("Frequency [Hz]")
     plt.ylabel("Mean Square Error")
     plt.plot(np.arange(60000,140000,100),mse)
-    plt.savefig("mse.png")
+    plt.savefig("Bilder/mse.png")
     
     print("The guess with noise and FFT length 2^10:",gf[0], "Hz")
     print("The guess after finetuning:",result.x[0]) 
