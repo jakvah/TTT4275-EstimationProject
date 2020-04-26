@@ -10,7 +10,7 @@ import sys
 dBs = [-10,0,10,20,30,40,50,60]
 lengthPowers = [10,12,14,16,18,20]
 
-ITERATIONS = 10
+ITERATIONS = 1000
 
 # ---------- Constants ---------- #
 A = 1.0
@@ -21,7 +21,7 @@ f_0 = 10**5
 omega_0 = 2*np.pi*f_0
 theta = np.pi/8
 
-FILENAME = "innafor.xlsx"
+FILENAME = "SimulationResults.xlsx"
 
 
 # ---------- CRLB Helpers ---------- #
