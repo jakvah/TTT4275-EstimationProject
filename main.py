@@ -83,7 +83,7 @@ for i in range(N):
 gFFT = np.fft.fft(gx,2**10)
 gf = bml.findDominantFrequency(np.absolute(gFFT),T,2**10)
 
-# ---------- Computes MLE of the frecuency ---------- #
+# ---------- Computes MLE of the frecuency and phase ---------- #
 def computeMLE():
     # ---------- Signals ---------- #
 
@@ -108,7 +108,7 @@ def computeMLE():
     # Fourier transform
     FT_x = np.fft.fft(x,fft_length)
     
-    # Finding most dominant in total signal
+    # Finding most dominant frequency in total signal
     f_2,i = bml.findDominantFrequency(np.absolute(FT_x),T,fft_length)
 
     t = np.angle((np.exp(-(np.complex(0,1)*2*np.pi*f_2*n_0*T)))*FT_x[i])
@@ -126,7 +126,9 @@ def functionToBeMinimized(f_variable):
 
     fftGuess = np.fft.fft(s,2**10)
 
-    return bml.meanSquareError(np.absolute(fftGuess),np.absolute(gFFT))
+    mse = bml.meanSquareError(np.absolute(fftGuess),np.absolute(gFFT))
+    #print(f_var_sliced,":",mse)
+    return mse
     
 
 def main():
@@ -190,10 +192,9 @@ def main():
     plt.plot(np.arange(60000,140000,100),mse)
     plt.savefig("Bilder/mse.png")
     
-    print("The guess with noise and FFT length 2^10:",gf[0], "Hz")
-    print("The guess after finetuning:",result.x[0]) 
-
-
-
+    print("The frequency estimate with noise and FFT length 2^10:",gf[0], "Hz")
+    print("The frequency estimate after finetuning:",result.x[0]) 
+    print("New error is:",f_0 - result.x[0])
+    
 
 main()
