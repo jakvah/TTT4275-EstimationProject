@@ -31,8 +31,9 @@ If you choose to simply execute the program without arugments or from an IDE lik
 As long FFT estimates are undesirable in practice, an FFT of length 1024 data points is finetuned by using a numerical search method for the frequency that minimizes the mean square error (MSE) between its the FFT of a signal with no noise and the specified frequency and the aformentioned computed FFT.
 
 ### Automation
-In order to perform and analyze larger simulations `auto.py` has been provided. It simulates point **a)** from above, but iterates through FFTs of lengths 2^{10,12,14,16,18,20}. For each FFT length iteration the signal is simulated with SNRs of {-10,0,10,20,30,40,50,60} [dB]. The amount of iterations are 1000. The results are saved to an Excel Spreadsheet file named "SimulationResults.xlsx" 
+In order to perform and analyze larger simulations `auto.py` has been provided. It simulates point **a)** from above, but iterates through FFTs of lengths 2^{10,12,14,16,18,20}. For each FFT length iteration the signal is simulated with SNRs of {-10,0,10,20,30,40,50,60} [dB]. The amount of iterations are 1000. The results are saved to an Excel spreadsheet file named "SimulationResults.xlsx" 
 
+`finetuning.py` servers a similar purpose for point **b)**. It finetunes the estimate and calculates the mean frequency, mean error and variance over 100 iterations. These values are computed for one SNR level and are just printing to the cmd line, not save in an Excel spreadsheet 
 ### Math functions
 
 The necessary mathematical calculations are done in a seperate module named `buggesmatteland.py` It is imported by both `main.py` and `auto.py` and must be included in the same folder.
